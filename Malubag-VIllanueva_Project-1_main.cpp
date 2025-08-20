@@ -1,54 +1,64 @@
-// Chanco, Malubag, Villanueva
-// 3 BS Computer Engineering
+// Malubag, Villanueva
+// 4 BS Computer Engineering
 
 // ENGG 123.01
 // Project 1: RISC-V Instruction Decoding
 
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <sstream>
-#include <cmath>
+// #include <vector>
+// #include <sstream>
+// #include <cmath>
 
-// #include "Chanco-Malubag-Villanueva_Project-2_Function.h"
+// #include "Malubag-Villanueva_Project-1_functions.h"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-  if((argc < 6) || (argc > 7))
+  cout << "\nRISC-V Instruction Decoding" << endl;
+      //  << "\nType \"help\" for more information." << endl;
+  
+  string userInput = "";
+  
+  while(userInput != "exit")
   {
-    cout << "\nInput format should be: " << argv[0] << " <signal-file>" <<
-    "<sampling-rate> <start-freq> <end-freq>" <<
-         "<num of steps> <output-file>" << endl;
+    cout << "Input instructions here:\n> ";
+    getline(cin, userInput);
 
-    cout << "\nProgram has been terminated" << endl;
+    if(userInput == "exit")
+    {
+      cout << "\nProgram has been terminated." << endl;
+      return 0;
+    }
+
+    ifstream inputFile(userInput);
   }
-  else
-  {
+}
+
+/*
+notes:
+registers: 5 bit (0 to 31)
+- 00000 = rs0 = hardwired to 0, otherwise error
+*/
+
+// int main(int argc, char *argv[])
+// {
+  // if((argc < 6) || (argc > 7))
+  // {
+  //   cout << "\nInput format should be: " << argv[0] << " <signal-file>" <<
+  //   "<sampling-rate> <start-freq> <end-freq>" <<
+  //        "<num of steps> <output-file>" << endl;
+
+  //   cout << "\nProgram has been terminated" << endl;
+  // }
+  // else
+  // {
     // //input file
     // string signal_file = argv[1];
 
     // //initialize values based on command prompt
     // stringstream s;
-
-    // double sampling_rate = 0.0;
-    // double start_freq = 0.0;
-    // double end_freq = 0.0;
-    // int nSteps = 0;
-
-    // s << argv[2];
-    // s >> sampling_rate;
-    // s.clear();
-    // s << argv[3];
-    // s >> start_freq;
-    // s.clear();
-    // s << argv[4];
-    // s >> end_freq;
-    // s.clear();
-    // s << argv[5];
-    // s >> nSteps;
-    // s.clear();
 
     // //output file
     // string output = (argc == 7) ? argv[6] : "dftlog.txt";
@@ -78,6 +88,6 @@ int main(int argc, char *argv[])
     //              phase, nSteps, start_freq, changeinfreq);
     // cout << "\nOutput successfully written to: " << output << endl;
 
-  }
-  return 0;
-}
+  // }
+//   return 0;
+// }
