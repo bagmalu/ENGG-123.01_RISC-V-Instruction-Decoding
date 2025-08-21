@@ -26,6 +26,15 @@ int main(int argc, char *argv[])
     cout << "Input instructions here:\n> ";
     getline(cin, userInput);
 
+    if(userInput.length() != 8)
+    {
+      cout << "Please enter an 8-character hex value\n\n";
+    }
+    else
+    {
+      cout << "valid hex input\n\n";
+    }
+
     if(userInput == "exit")
     {
       cout << "\nProgram has been terminated." << endl;
