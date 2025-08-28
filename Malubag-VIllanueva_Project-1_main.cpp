@@ -5,98 +5,82 @@
 // Project 1: RISC-V Instruction Decoding
 
 #include <iostream>
-#include <fstream>
-// #include <vector>
-// #include <sstream>
-// #include <cmath>
+#include <algorithm>
+#include <bitset>
 
 // #include "Malubag-Villanueva_Project-1_functions.h"
 
 using namespace std;
 
-int main(int argc, char *argv[])
+bool isValidHex(const string &s)
 {
-  cout << "\nRISC-V Instruction Decoding" << endl;
-      //  << "\nType \"help\" for more information." << endl;
+  if(s.length() != 8) return false;
+  for(int i=0; i<s.length(); i++)
+  {
+    char c = s[i];
+    if(!isxdigit(c)) return false;
+  }
+  return true;
+}
+
+int main()
+{
+  cout << "\nRISC-V Instruction Decoding"
+       << "\n(Type EXIT to terminate the program.)" << endl;
   
   string userInput = "";
   
-  while(userInput != "exit")
+  while(true)
   {
-    cout << "Input instructions here:\n> ";
+    cout << "\nInput instructions here:\n> ";
     getline(cin, userInput);
+    cout << userInput.length() <<endl;
+    transform(userInput.begin(), userInput.end(), userInput.begin(), [](unsigned char c) {return toupper(c); });
 
-    if(userInput.length() != 8)
+    if(userInput == "EXIT")
     {
-      cout << "Please enter an 8-character hex value\n\n";
-    }
-    else
-    {
-      cout << "valid hex input\n\n";
-    }
-
-    if(userInput == "exit")
-    {
-      cout << "\nProgram has been terminated." << endl;
+      cout << "\nProgram has been terminated.\n" << endl;
       return 0;
     }
 
-    ifstream inputFile(userInput);
+    if(!isValidHex(userInput))
+    {
+      cout << "ERROR: Please input an 8-bit hex value." << endl;
+    }
+    else
+    {
+      unsigned long instruction = stoul(userInput, nullptr, 16);
+      cout << userInput << " | " << bitset<32>(instruction) << endl;
+
+      unsigned long opcode =  instruction & 0x7F;
+      unsigned long rd =     (instruction >> 7)  & 0x1F;
+
+      //checks if rd is modified (should be hardwired to 0)
+      if(
+          (opcode == 0b0110011  ||  // add and sub
+           opcode == 0b0010011  ||  // addi
+           opcode == 0b0000011  ||  // ld
+           opcode == 0b0100011) &&  // sd
+          rd != 0
+        )
+      {
+        // for testing: 003100B3 changes rd
+        cout << "ERROR: The value of rd cannot be modified." << endl;
+        continue;
+      }
+
+      // // R Format
+      // unsigned long funct3 = (instruction >> 12) & 0x07;
+      // unsigned long rs1 =    (instruction >> 17) & 0x1F;
+      // unsigned long rs2 =    (instruction >> 22) & 0x1F;
+      // unsigned long funct7 = (instruction >> 25) & 0x7F;
+
+      // // I Format
+      // unsigned long immediate = (instruction >> 20) & 0xFFF;
+
+      // // S Format
+      // unsigned long imm_short = (instruction >> 7) & 0x1F;
+      // unsigned long imm_long =  (instruction >> 25) & 0x7F;
+    }
   }
 }
-
-/*
-notes:
-registers: 5 bit (0 to 31)
-- 00000 = rs0 = hardwired to 0, otherwise error
-*/
-
-// int main(int argc, char *argv[])
-// {
-  // if((argc < 6) || (argc > 7))
-  // {
-  //   cout << "\nInput format should be: " << argv[0] << " <signal-file>" <<
-  //   "<sampling-rate> <start-freq> <end-freq>" <<
-  //        "<num of steps> <output-file>" << endl;
-
-  //   cout << "\nProgram has been terminated" << endl;
-  // }
-  // else
-  // {
-    // //input file
-    // string signal_file = argv[1];
-
-    // //initialize values based on command prompt
-    // stringstream s;
-
-    // //output file
-    // string output = (argc == 7) ? argv[6] : "dftlog.txt";
-    // cout << "\nOutput will be uploaded to: " << output << endl;
-
-    // int l_points = 0; //duration
-
-    // double * data = importData(signal_file, l_points);\
-
-    // double * real_part = new double[nSteps];
-    // double * imag_part = new double[nSteps];
-    // double * magnitude = new double[nSteps];
-    // double * phase = new double[nSteps];
-
-
-    // computeDFT(data, l_points,
-    //            sampling_rate, start_freq, end_freq, nSteps,
-    //            real_part, imag_part,
-    //            magnitude, phase);
-
-
-    // // Calculate frequency step size
-    // double changeinfreq = (end_freq - start_freq) / (nSteps);
-
-    // //exporting to output file
-    // outputResult(output.c_str(), real_part, imag_part, magnitude,
-    //              phase, nSteps, start_freq, changeinfreq);
-    // cout << "\nOutput successfully written to: " << output << endl;
-
-  // }
-//   return 0;
-// }
