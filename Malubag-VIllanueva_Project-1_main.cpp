@@ -56,7 +56,7 @@ int main()
       unsigned long opcode =  instruction & 0x7F;
       unsigned long rd =     (instruction >> 7)  & 0x1F;
 
-      //checks if rd is modified (should be hardwired to 0)
+      //checks if opcode is part of the options from the specifications
       if(
           (opcode == 0b0110011  ||  // add and sub
            opcode == 0b0010011  ||  // addi
@@ -65,8 +65,7 @@ int main()
           rd == 0
         )
       {
-        // for testing: 003100B3 changes rd
-        cout << "ERROR: The value of rd cannot be modified." << endl;
+        // cout << "ERROR: The value of rd cannot be modified." << endl;
         continue;
       }
 
