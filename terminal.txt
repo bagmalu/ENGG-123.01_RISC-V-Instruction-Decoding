@@ -1,5 +1,7 @@
 to compile:
 - g++ -o Malubag-VIllanueva_Project-1_main.cpp
+- g++ -o test.exe Malubag-VIllanueva_Project-1_main.cpp
 
 to run:
 - .\filename.exe
+- .\test.exe
