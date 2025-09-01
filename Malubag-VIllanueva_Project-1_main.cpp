@@ -34,12 +34,11 @@ int main()
   {
     cout << "\nInput instructions here:\n> ";
     getline(cin, userInput);
-    cout << userInput.length() <<endl;
+    //cout << userInput.length() <<endl;
     transform(userInput.begin(), userInput.end(), userInput.begin(), [](unsigned char c) {return toupper(c); });
 
     if(userInput == "EXIT")
     {
-      //for some reason it outputs "4" before this next line ?
       cout << "\nProgram has been terminated.\n" << endl;
       return 0;
     }
@@ -57,17 +56,17 @@ int main()
       unsigned long rd =     (instruction >> 7)  & 0x1F;
 
       //checks if opcode is part of the options from the specifications
-      if(
-          (opcode == 0b0110011  ||  // add and sub
-           opcode == 0b0010011  ||  // addi
-           opcode == 0b0000011  ||  // ld
-           opcode == 0b0100011) &&  // sd
-          rd == 0
-        )
-      {
-        // cout << "ERROR: The value of rd cannot be modified." << endl;
-        continue;
-      }
+      // if(
+      //     (opcode == 0b0110011  ||  // add and sub
+      //      opcode == 0b0010011  ||  // addi
+      //      opcode == 0b0000011  ||  // ld
+      //      opcode == 0b0100011) &&  // sd
+      //     rd != 0
+      //   )
+      // {
+      //   // cout << "ERROR: The value of rd cannot be modified." << endl;
+      //   continue;
+      // }
 
       // R Format
       unsigned long funct3 = (instruction >> 12) & 0x07;
@@ -85,36 +84,63 @@ int main()
       if (imm_s & 0x800) imm_s |= 0xFFFFF000;
 
 
+      switch (opcode) {
+        case 0b0110011: // R-type ADD/SUB
+          if (funct3 == 0 && funct7 == 0x00) { // ADD
+            if (rd == 0) {
+              cout << "ERROR: Cannot write to x0 (rd = 0)." << endl;
+            } else {
+              cout << "add x" << rd << ", x" << rs1 << ", x" << rs2 << endl;
+            }
+          }
+          if (funct3 == 0 && funct7 == 0x20) { // SUB
+            if (rd == 0) {
+              cout << "ERROR: Cannot write to x0 (rd = 0)." << endl;
+            } else {
+              cout << "sub x" << rd << ", x" << rs1 << ", x" << rs2 << endl;
+            }
+          }
+          break;
 
-      if (opcode == 0b0110011) { // R-type
-        if (funct3 == 0 && funct7 == 0x00) {
-          cout << "add x" << rd << ", x" << rs1 << ", x" << rs2 << endl;
-        }
-        else if (funct3 == 0 && funct7 == 0x20) {
-          cout << "sub x" << rd << ", x" << rs1 << ", x" << rs2 << endl;
-        }
+        case 0b0010011: // I-type ADDI
+          if (funct3 == 0) {
+            if (rd == 0) {
+              cout << "ERROR: Cannot write to x0 (rd = 0)." << endl;
+            } else {
+              cout << "addi x" << rd << ", x" << rs1 << ", " << immediate << endl;
+            }
+          }
+          break;
+
+        case 0b0000011: // I-type LD
+          if (funct3 == 3) {
+            if (rd == 0) {
+              cout << "ERROR: Cannot write to x0 (rd = 0)." << endl;
+            } else {
+              cout << "ld x" << rd << ", " << immediate << "(x" << rs1 << ")" << endl;
+            }
+          }
+          break;
+
+        case 0b0100011: // S-type SD
+          if (funct3 == 3) {
+            if (rs2 == 0) {
+              cout << "ERROR: Cannot store from x0 (rs2 = 0)." << endl; //does not print out
+            } else {
+              cout << "sd x" << rs2 << ", " << imm_s << "(x" << rs1 << ")" << endl;
+            }
+          }
+          break;
+
+        default:
+          cout << "Unsupported instruction. "
+               << "opcode=" << opcode
+               << " funct3=" << funct3
+               << " funct7=" << funct7 << endl;
       }
-      else if (opcode == 0b0010011) { // I-type addi
-        if (funct3 == 0) {
-          cout << "addi x" << rd << ", x" << rs1 << ", " << immediate << endl;
-        }
-      }
-      else if (opcode == 0b0000011) { // I-type ld
-        if (funct3 == 3) {
-          cout << "ld x" << rd << ", " << immediate << "(x" << rs1 << ")" << endl;
-        }
-      }
-      else if (opcode == 0b0100011) { // S-type sd
-        if (funct3 == 3) {
-          cout << "sd x" << rs2 << ", " << imm_s << "(x" << rs1 << ")" << endl;
-        }
-      }
-      else {
-        cout << "Unsupported instruction. "
-             << "opcode=" << opcode
-             << " funct3=" << funct3
-             << " funct7=" << funct7 << endl;
-      }
+
+
+
     }
   }
 }
