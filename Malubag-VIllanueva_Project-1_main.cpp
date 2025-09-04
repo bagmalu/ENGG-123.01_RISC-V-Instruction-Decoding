@@ -8,8 +8,6 @@
 #include <algorithm>
 #include <bitset>
 
-// #include "Malubag-Villanueva_Project-1_functions.h"
-
 using namespace std;
 
 bool isValidHex(const string &s)
@@ -34,7 +32,6 @@ int main()
   {
     cout << "\nInput instructions here:\n> ";
     getline(cin, userInput);
-    //cout << userInput.length() <<endl;
     transform(userInput.begin(), userInput.end(), userInput.begin(), [](unsigned char c) {return toupper(c); });
 
     if(userInput == "EXIT")
@@ -53,25 +50,12 @@ int main()
       cout << userInput << " | " << bitset<32>(instruction) << endl;
 
       unsigned long opcode =  instruction & 0x7F;
-      unsigned long rd =     (instruction >> 7)  & 0x1F;
-
-      //checks if opcode is part of the options from the specifications
-      // if(
-      //     (opcode == 0b0110011  ||  // add and sub
-      //      opcode == 0b0010011  ||  // addi
-      //      opcode == 0b0000011  ||  // ld
-      //      opcode == 0b0100011) &&  // sd
-      //     rd != 0
-      //   )
-      // {
-      //   // cout << "ERROR: The value of rd cannot be modified." << endl;
-      //   continue;
-      // }
+      unsigned long rd     = (instruction >> 7)  & 0x1F;
 
       // R Format
       unsigned long funct3 = (instruction >> 12) & 0x07;
-      unsigned long rs1 =    (instruction >> 15) & 0x1F;
-      unsigned long rs2 =    (instruction >> 20) & 0x1F;
+      unsigned long rs1    = (instruction >> 15) & 0x1F;
+      unsigned long rs2    = (instruction >> 20) & 0x1F;
       unsigned long funct7 = (instruction >> 25) & 0x7F;
 
       // I Format
@@ -83,60 +67,79 @@ int main()
       unsigned long imm_s = ((instruction >> 7) & 0x1F) | (((instruction >> 25) & 0x7F) << 5);
       if (imm_s & 0x800) imm_s |= 0xFFFFF000;
 
-
       switch (opcode) {
         case 0b0110011: // R-type ADD/SUB
-          if (funct3 == 0 && funct7 == 0x00) { // ADD
-            if (rd == 0) {
+          if (funct3 == 0 && funct7 == 0x00) 
+          { // ADD
+            if (rd == 0) 
+            {
               cout << "ERROR: Cannot write to x0 (rd = 0)." << endl;
-            } else {
+            } 
+            else 
+            {
               cout << "add x" << rd << ", x" << rs1 << ", x" << rs2 << endl;
             }
           }
-          if (funct3 == 0 && funct7 == 0x20) { // SUB
-            if (rd == 0) {
+          if (funct3 == 0 && funct7 == 0x20) 
+          { // SUB
+            if (rd == 0) 
+            {
               cout << "ERROR: Cannot write to x0 (rd = 0)." << endl;
-            } else {
+            } 
+            else 
+            {
               cout << "sub x" << rd << ", x" << rs1 << ", x" << rs2 << endl;
             }
           }
           break;
 
         case 0b0010011: // I-type ADDI
-          if (funct3 == 0) {
-            if (rd == 0) {
+          if (funct3 == 0) 
+          {
+            if (rd == 0) 
+            {
               cout << "ERROR: Cannot write to x0 (rd = 0)." << endl;
-            } else {
+            } 
+            else 
+            {
               cout << "addi x" << rd << ", x" << rs1 << ", " << immediate << endl;
             }
           }
           break;
 
         case 0b0000011: // I-type LD
-          if (funct3 == 3) {
-            if (rd == 0) {
+          if (funct3 == 3) 
+          {
+            if (rd == 0) 
+            {
               cout << "ERROR: Cannot write to x0 (rd = 0)." << endl;
-            } else {
+            } 
+            else 
+            {
               cout << "ld x" << rd << ", " << immediate << "(x" << rs1 << ")" << endl;
             }
           }
           break;
 
         case 0b0100011: // S-type SD
-          if (funct3 == 3) {
-            if (rs2 == 0) {
+          if (funct3 == 3) 
+          {
+            if (rs2 == 0) 
+            {
               cout << "ERROR: Cannot store from x0 (rs2 = 0)." << endl; //does not print out
-            } else {
+            } 
+            else 
+            {
               cout << "sd x" << rs2 << ", " << imm_s << "(x" << rs1 << ")" << endl;
             }
           }
           break;
 
         default:
-          cout << "Unsupported instruction. "
-               << "opcode=" << opcode
-               << " funct3=" << funct3
-               << " funct7=" << funct7 << endl;
+          cout << "Unsupported instruction.\n"
+               << "opcode="  << opcode
+               << "\tfunct3=" << funct3
+               << "\tfunct7=" << funct7 << endl;
       }
 
 
