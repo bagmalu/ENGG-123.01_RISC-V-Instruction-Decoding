@@ -30,7 +30,7 @@ int main()
   
   while(true)
   {
-    cout << "\nInput instructions here\n> ";
+    cout << "\nInput instructions here:\n> ";
     getline(cin, userInput);
     transform(userInput.begin(), userInput.end(), userInput.begin(), [](unsigned char c) {return toupper(c); });
 
@@ -47,22 +47,23 @@ int main()
     else
     {
       unsigned long instruction = stoul(userInput, nullptr, 16);
-      cout << "\nInstruction: " << bitset<32>(instruction) << "\n\n";
+      cout << userInput << " | " << bitset<32>(instruction) << endl;
 
-      unsigned long opcode =  instruction & 0x7F;
-      unsigned long rd     = (instruction >> 7)  & 0x1F;
+      int opcode =  instruction & 0x7F;
+      int rd     = (instruction >> 7)  & 0x1F;
 
       // R Format
-      unsigned long funct3 = (instruction >> 12) & 0x07;
-      unsigned long rs1    = (instruction >> 15) & 0x1F;
-      unsigned long rs2    = (instruction >> 20) & 0x1F;
-      unsigned long funct7 = (instruction >> 25) & 0x7F;
+      int funct3 = (instruction >> 12) & 0x07;
+      int rs1    = (instruction >> 15) & 0x1F;
+      int rs2    = (instruction >> 20) & 0x1F;
+      int funct7 = (instruction >> 25) & 0x7F;
 
       // I Format
-      unsigned long immediate = (instruction >> 20) & 0xFFF;
+      int immediate = (instruction >> 20) & 0xFFF;
+      if (immediate & 0x800) immediate |= 0xFFFFF000;
 
       // S Format
-      unsigned long imm_s = ((instruction >> 7) & 0x1F) | (((instruction >> 25) & 0x7F) << 5);
+      int imm_s = ((instruction >> 7) & 0x1F) | (((instruction >> 25) & 0x7F) << 5);
       if (imm_s & 0x800) imm_s |= 0xFFFFF000;
 
       switch (opcode) {
