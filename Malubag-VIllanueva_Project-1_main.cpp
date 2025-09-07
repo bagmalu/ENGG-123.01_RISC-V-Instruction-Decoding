@@ -30,7 +30,7 @@ int main()
   
   while(true)
   {
-    cout << "\nInput instructions here:\n> ";
+    cout << "\nInput instructions here\n> ";
     getline(cin, userInput);
     transform(userInput.begin(), userInput.end(), userInput.begin(), [](unsigned char c) {return toupper(c); });
 
