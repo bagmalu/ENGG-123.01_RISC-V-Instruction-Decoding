@@ -47,7 +47,7 @@ int main()
     else
     {
       unsigned long instruction = stoul(userInput, nullptr, 16);
-      cout << userInput << " | " << bitset<32>(instruction) << endl;
+      cout << "\nInstruction: " << bitset<32>(instruction) << "\n\n";
 
       int opcode =  instruction & 0x7F;
       int rd     = (instruction >> 7)  & 0x1F;
