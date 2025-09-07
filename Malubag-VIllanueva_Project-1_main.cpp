@@ -30,7 +30,7 @@ int main()
   
   while(true)
   {
-    cout << "\nInput instructions here:\n> ";
+    cout << "\nInput instructions here\n> ";
     getline(cin, userInput);
     transform(userInput.begin(), userInput.end(), userInput.begin(), [](unsigned char c) {return toupper(c); });
 
@@ -47,7 +47,7 @@ int main()
     else
     {
       unsigned long instruction = stoul(userInput, nullptr, 16);
-      cout << userInput << " | " << bitset<32>(instruction) << endl;
+      cout << "\nInstruction: " << bitset<32>(instruction) << "\n\n";
 
       unsigned long opcode =  instruction & 0x7F;
       unsigned long rd     = (instruction >> 7)  & 0x1F;
@@ -135,9 +135,9 @@ int main()
 
         default:
           cout << "Unsupported instruction.\n"
-               << "opcode="  << opcode
-               << "\tfunct3=" << funct3
-               << "\tfunct7=" << funct7 << endl;
+               << "opcode = "   << opcode
+               << "\tfunct3 = " << funct3
+               << "\tfunct7 = " << funct7 << endl;
       }
     }
   }
