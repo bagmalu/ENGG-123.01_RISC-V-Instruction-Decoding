@@ -32,7 +32,8 @@ int main()
   {
     cout << "\nInput instructions here:\n> ";
     getline(cin, userInput);
-    transform(userInput.begin(), userInput.end(), userInput.begin(), [](unsigned char c) {return toupper(c); });
+    transform(userInput.begin(), userInput.end(), userInput.begin(), 
+              [](unsigned char c) {return toupper(c); });
 
     if(userInput == "EXIT")
     {
@@ -63,7 +64,8 @@ int main()
       if (immediate & 0x800) immediate |= 0xFFFFF000;
 
       // S Format
-      int imm_s = ((instruction >> 7) & 0x1F) | (((instruction >> 25) & 0x7F) << 5);
+      int imm_s = ((instruction >> 7) & 0x1F) | 
+                  (((instruction >> 25) & 0x7F) << 5);
       if (imm_s & 0x800) imm_s |= 0xFFFFF000;
 
       switch (opcode) {
@@ -72,11 +74,13 @@ int main()
           { // ADD
             if (rd == 0) 
             {
-              cout << "ERROR: Cannot write to x0 (rd = 0)." << endl;
+              cout << "ERROR: Cannot write to x0 (rd = 0)." 
+                   << endl;
             } 
             else 
             {
-              cout << "add x" << rd << ", x" << rs1 << ", x" << rs2 << endl;
+              cout << "add x" << rd << ", x" << rs1 << ", x" 
+                   << rs2 << endl;
             }
           }
           if (funct3 == 0 && funct7 == 0x20) 
@@ -87,7 +91,8 @@ int main()
             } 
             else 
             {
-              cout << "sub x" << rd << ", x" << rs1 << ", x" << rs2 << endl;
+              cout << "sub x" << rd << ", x" << rs1 << ", x" << rs2 
+                   << endl;
             }
           }
           break;
@@ -101,7 +106,8 @@ int main()
             } 
             else 
             {
-              cout << "addi x" << rd << ", x" << rs1 << ", " << immediate << endl;
+              cout << "addi x" << rd << ", x" << rs1 << ", " 
+                   << immediate << endl;
             }
           }
           break;
@@ -115,7 +121,8 @@ int main()
             } 
             else 
             {
-              cout << "ld x" << rd << ", " << immediate << "(x" << rs1 << ")" << endl;
+              cout << "ld x" << rd << ", " << immediate 
+                   << "(x" << rs1 << ")" << endl;
             }
           }
           break;
@@ -125,11 +132,13 @@ int main()
           {
             if (rs2 == 0) 
             {
-              cout << "ERROR: Cannot store from x0 (rs2 = 0)." << endl; 
+              cout << "ERROR: Cannot store from x0 (rs2 = 0)." 
+                   << endl; 
             } 
             else 
             {
-              cout << "sd x" << rs2 << ", " << imm_s << "(x" << rs1 << ")" << endl;
+              cout << "sd x" << rs2 << ", " << imm_s 
+                   << "(x" << rs1 << ")" << endl;
             }
           }
           break;
