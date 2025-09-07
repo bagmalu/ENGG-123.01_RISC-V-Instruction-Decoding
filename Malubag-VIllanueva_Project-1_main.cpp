@@ -50,14 +50,14 @@ int main()
       unsigned long instruction = stoul(userInput, nullptr, 16);
       cout << "\nInstruction: " << bitset<32>(instruction) << "\n\n";
 
-      int opcode =  instruction & 0x7F;
-      int rd     = (instruction >> 7)  & 0x1F;
+      unsigned int opcode =  instruction & 0x7F;
+      unsigned int rd     = (instruction >> 7)  & 0x1F;
 
       // R Format
-      int funct3 = (instruction >> 12) & 0x07;
-      int rs1    = (instruction >> 15) & 0x1F;
-      int rs2    = (instruction >> 20) & 0x1F;
-      int funct7 = (instruction >> 25) & 0x7F;
+      unsigned int funct3 = (instruction >> 12) & 0x07;
+      unsigned int rs1    = (instruction >> 15) & 0x1F;
+      unsigned int rs2    = (instruction >> 20) & 0x1F;
+      unsigned int funct7 = (instruction >> 25) & 0x7F;
 
       // I Format
       int immediate = (instruction >> 20) & 0xFFF;
