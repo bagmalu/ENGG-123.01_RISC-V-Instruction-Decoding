@@ -62,8 +62,6 @@ int main()
       unsigned long immediate = (instruction >> 20) & 0xFFF;
 
       // S Format
-      // unsigned long imm_short = (instruction >> 7) & 0x1F;
-      // unsigned long imm_long =  (instruction >> 25) & 0x7F;
       unsigned long imm_s = ((instruction >> 7) & 0x1F) | (((instruction >> 25) & 0x7F) << 5);
       if (imm_s & 0x800) imm_s |= 0xFFFFF000;
 
@@ -108,8 +106,6 @@ int main()
           break;
 
         case 0b0000011: // I-type LD
-          // cout << "I-type LD" << endl;
-          // cout << funct3 << endl;
           if (funct3 == 3) 
           {
             if (rd == 0) 
@@ -124,14 +120,11 @@ int main()
           break;
 
         case 0b0100011: // S-type SD
-          // cout << "S-type SD" << endl;
-          // cout << funct3 << endl;
           if (funct3 == 3) 
           {
             if (rs2 == 0) 
             {
               cout << "ERROR: Cannot store from x0 (rs2 = 0)." << endl; 
-              //either mali to or mali example na bigay ni chat teka
             } 
             else 
             {
@@ -146,9 +139,6 @@ int main()
                << "\tfunct3 = " << funct3
                << "\tfunct7 = " << funct7 << endl;
       }
-
-
-
     }
   }
 }
