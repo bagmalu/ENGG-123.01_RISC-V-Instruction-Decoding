@@ -108,6 +108,8 @@ int main()
           break;
 
         case 0b0000011: // I-type LD
+          // cout << "I-type LD" << endl;
+          // cout << funct3 << endl;
           if (funct3 == 3) 
           {
             if (rd == 0) 
@@ -122,11 +124,14 @@ int main()
           break;
 
         case 0b0100011: // S-type SD
+          // cout << "S-type SD" << endl;
+          // cout << funct3 << endl;
           if (funct3 == 3) 
           {
             if (rs2 == 0) 
             {
-              cout << "ERROR: Cannot store from x0 (rs2 = 0)." << endl; //does not print out
+              cout << "ERROR: Cannot store from x0 (rs2 = 0)." << endl; 
+              //either mali to or mali example na bigay ni chat teka
             } 
             else 
             {
